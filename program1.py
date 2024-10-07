@@ -4,21 +4,32 @@ class Solution(object):
         :type s: str
         :rtype: bool
         """
-        roman = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
-        
-        # Initialize the result
-        result = 0
-        
-        # Iterate over the string
-        for i in range(len(s)):
-            # If the current value is less than the next value, subtract it
-            if i + 1 < len(s) and roman[s[i]] < roman[s[i + 1]]:
-                result -= roman[s[i]]
-            else:
-                # Otherwise, add the value
-                result += roman[s[i]]
+        bracket_map = {')': '(', '}': '{', ']': '['}
+        # Stack to keep track of opening brackets
+        stack = []
+
+        for char in s:
+            # If it's a closing bracket
+            if char in bracket_map:
+                # Pop the topmost element if the stack is not empty
+                # Otherwise, assign a dummy value
+                top_element = stack.pop() if stack else '#'
                 
-        return result
+                # If the mapping doesn't match, return false
+                if bracket_map[char] != top_element:
+                    return False
+            else:
+                # It's an opening bracket, push to stack
+                stack.append(char)
+        
+        # In the end, the stack should be empty if valid
+        return not stack
+
+# Example usage:
+solution = Solution()
+print(solution.isValid("()"))      # Output: True
+print(solution.isValid("()[]{}"))  # Output: True
+print(solution.isValid("(]")) 
 
 
 
